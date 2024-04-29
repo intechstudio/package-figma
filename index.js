@@ -1,6 +1,6 @@
 let fs = require("fs");
 let path = require("path");
-const WebSocket = require('ws');
+const WebSocket = require("ws");
 
 let isEnabled = false;
 let controller = undefined;
@@ -11,41 +11,42 @@ const SERVER_PORT = 10972;
 let wss = undefined;
 let figmaConnection = undefined;
 
-function onWebsocketMessage(){
-  console.log('Received: %s', message);
+function onWebsocketMessage() {
+  console.log("Received: %s", message);
 }
 
 function startWebSocketServer(port) {
   wss = new WebSocket.Server({ port: port, host: "127.0.0.1" });
 
-  wss.on('connection', (ws) => {
+  wss.on("connection", (ws) => {
+    figmaConnection?.terminate();
+    figmaConnection = ws;
+    ws.on("message", onWebsocketMessage);
+    ws.on("error", () => {
       figmaConnection?.terminate();
-      figmaConnection = ws;
-      ws.on('message', onWebsocketMessage);
-      ws.on('error', () => {
-        figmaConnection?.terminate();
-        figmaConnection = undefined;
-        sendCurrentConnectionStatus();
-      })
-      ws.on("close", () => { sendCurrentConnectionStatus(); });
+      figmaConnection = undefined;
       sendCurrentConnectionStatus();
+    });
+    ws.on("close", () => {
+      sendCurrentConnectionStatus();
+    });
+    sendCurrentConnectionStatus();
   });
 
-  wss.on('error', (err) => {
-    if (err.code === 'EADDRINUSE') {
-        console.log(`Port ${port} is already in use. Trying another port...`);
-        startWebSocketServer(0); // Try random port
+  wss.on("error", (err) => {
+    if (err.code === "EADDRINUSE") {
+      console.log(`Port ${port} is already in use. Trying another port...`);
+      startWebSocketServer(0); // Try random port
     } else {
-        console.error('WebSocket server encountered an error:', err);
+      console.error("WebSocket server encountered an error:", err);
     }
   });
 
-  wss.on('listening', () => {
+  wss.on("listening", () => {
     console.log(`WebSocket server is listening on port ${wss.address().port}`);
     sendCurrentConnectionStatus();
   });
 }
-
 
 exports.loadPackage = async function (gridController, persistedData) {
   controller = gridController;
@@ -110,9 +111,11 @@ exports.addMessagePort = async function (port) {
   sendCurrentConnectionStatus();
 };
 
-function sendCurrentConnectionStatus(){
+function sendCurrentConnectionStatus() {
   messagePorts.forEach((port) => {
-    const serverAddress = wss ? `${wss.address().address}:${wss.address().port}` : "Not running";
+    const serverAddress = wss
+      ? `${wss.address().address}:${wss.address().port}`
+      : "Not running";
     const clientConnected = figmaConnection?.readyState == 1;
     port.postMessage({
       type: "status",
@@ -124,19 +127,19 @@ function sendCurrentConnectionStatus(){
 
 exports.sendMessage = async function (args) {
   if (figmaConnection?.readyState != 1) {
-    controller.sendMessageToRuntime(
-      {
-        id: "show-message",
-        message: "No connection to figma!",
-        messageType: "fail",
-      }
-    )
+    controller.sendMessageToRuntime({
+      id: "show-message",
+      message: "No connection to figma!",
+      messageType: "fail",
+    });
     return;
   }
 
-  figmaConnection.send(JSON.stringify({
-    selectedNodes: args[0],
-    targetProperty: args[1],
-    value: args[2],
-  }));
+  figmaConnection.send(
+    JSON.stringify({
+      selectedNodes: args[0],
+      targetProperty: args[1],
+      value: args[2],
+    }),
+  );
 };

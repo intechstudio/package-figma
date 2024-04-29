@@ -1,11 +1,12 @@
 <h2>Grid Editor Plugin</h2>
-<p>Connection Status: <p id="status"></p>
+<p>Connection Status:</p>
+<p id="status"></p>
 <script>
   let webSocketClient = undefined;
   let webSocketUrl = "ws://127.0.0.1:10972";
   let connectionCheckInterval = 2000;
   let receivedMessages = [];
-  let wsClientStatus = document.getElementById('status');
+  let wsClientStatus = document.getElementById("status");
   function connectToWebSocket() {
     if (webSocketClient) {
       //console.info("WebSocket is already connected, disconnect first.");
@@ -26,7 +27,7 @@
     });
     webSocketClient.addEventListener("message", function (event) {
       let data = JSON.parse(event.data);
-      parent.postMessage({ pluginMessage: data }, '*')
+      parent.postMessage({ pluginMessage: data }, "*");
     });
   }
   setInterval(() => {
