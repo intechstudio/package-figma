@@ -1,0 +1,13 @@
+{
+  "name": "Grid Editor Plugin",
+  "id": "1216311505317570600",
+  "api": "1.0.0",
+  "main": "code.js",
+  "capabilities": [],
+  "enableProposedApi": false,
+  "editorType": [
+    "figma",
+    "figjam"
+  ],
+  "ui": "ui.html"
+}

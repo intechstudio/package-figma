@@ -1,0 +1,16 @@
+{
+  "name": "Grid Editor Plugin",
+  "version": "1.0.0",
+  "description": "Connection for hotkeys to Grid Editor",
+  "main": "code.js",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "watch": "npm run build -- --watch"
+  },
+  "author": "",
+  "license": "",
+  "devDependencies": {
+    "@figma/plugin-typings": "^1.61.0",
+    "typescript": "*"
+  }
+}
