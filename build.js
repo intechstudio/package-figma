@@ -9,7 +9,7 @@ if (!fs.existsSync(subfolder)) {
   fs.mkdirSync(subfolder);
 }
 
-const excludedFiles = [subfolder, "archive.js", "build.js", ".github", ".git"];
+const excludedFiles = [subfolder, "components", "archive.js", "build.js", ".github", ".git"];
 
 // Get all files and directories in the current folder
 const files = fs.readdirSync(".");
