@@ -20,6 +20,10 @@ for (const file of files) {
   }
 }
 
+//Copy components dist folder
+fs.mkdirSync(`${subfolder}/components`);
+fs.renameSync("components/dist", `${subfolder}/components/dist`);
+
 output.on("close", () => {
   console.log("Archive created successfully.");
 });

@@ -55,13 +55,8 @@ exports.loadPackage = async function (gridController, persistedData) {
     path.resolve(__dirname, "figma_logo.svg"),
     { encoding: "utf-8" },
   );
-
-  let actionHtml = fs.readFileSync(
-    path.resolve(__dirname, "figma_action.html"),
-    { encoding: "utf-8" },
-  );
-  controller.sendMessageToRuntime({
-    id: "add-action",
+  controller.sendMessageToEditor({
+    type: "add-action",
     info: {
       actionId: 0,
       short: "xfigma",
@@ -79,7 +74,7 @@ exports.loadPackage = async function (gridController, persistedData) {
       hideIcon: false,
       type: "single",
       toggleable: true,
-      actionHtml: actionHtml,
+      actionComponent: "figma-action",
     },
   });
 
