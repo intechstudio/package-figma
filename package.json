@@ -5,7 +5,13 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "install:components": "cd ./components && npm install",
+    "build:components": "cd ./components && npm run build",
+    "dev:components": "cd ./components && npm run dev",
+    "postinstall": "run-p install:*",
+    "build": "run-p build:*",
+    "dev": "run-p dev:*"
   },
   "author": "",
   "license": "ISC",
@@ -16,5 +22,10 @@
   "dependencies": {
     "archiver": "^7.0.1",
     "ws": "^8.12.0"
+  },
+  "devDependencies": {
+    "prettier": "^3.5.3",
+    "prettier-plugin-svelte": "^3.3.3",
+    "npm-run-all": "^4.1.5"
   }
 }
